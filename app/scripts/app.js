@@ -7,10 +7,23 @@ blocJams.config(function($stateProvider, $locationProvider) {
         requireBase: false
     });
     
-    $stateProvider.state('album', {
-        url: '/album',
-        controller: 'Album.comtroller',
-        templateUrl: '/templates/album.html'
-    });
+    $stateProvider
+    	.state('album', {
+	        url: '/album',
+	        controller: 'Album.controller',
+	        templateUrl: '/templates/album.html'
+    	})
+
+    	.state('collection', {
+    		url: '/collection',
+    		controller: 'Collection.controller',
+    		templateUrl: '/templates/collection.html'
+    	})
+
+    	.state('landing', {
+    		url: '/landing',
+    		controller: 'Landing.controller',
+    		templateUrl: '/templates/landing.html'
+    	});
     
 });
