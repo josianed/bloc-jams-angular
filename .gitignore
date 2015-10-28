@@ -4,3 +4,5 @@ bower_components/
 .sass-cache/
 .DS_Storedist
 dist
+dist/index.html
+dist/scripts/app.js
