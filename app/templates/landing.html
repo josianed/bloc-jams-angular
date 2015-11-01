@@ -1,4 +1,4 @@
-<body class="landing">
+<body class="landing" ng-app="blocJams">
     <nav class="navbar"> <!-- nav bar -->
         <a href="index.html" class="logo">
             <img src="assets/images/bloc_jams_logo.png" alt="bloc jams logo">
@@ -8,7 +8,7 @@
         </div>
     </nav>
     <section class="hero-content"> <!-- hero content -->
-        <h1 class="hero-title">Turn the music up!</h1>
+        <h1 class="hero-title" ng-controller="LandingController">{{ title }}</h1>
     </section> 
     <section class="selling-points container"> <!-- selling points -->
         <div class="point column third">

@@ -1,4 +1,4 @@
- <body class="album">
+ <body class="album" ng-app="blocJams">
     <nav class="navbar"> <!-- navbar -->
         <a href="index.html" class="logo">
             <img src="assets/images/bloc_jams_logo.png" alt="bloc jams logo">
@@ -20,7 +20,11 @@
             </div>
         </section>
         <table class="album-view-song-list">
-            
+           <tr class="album-view-song-item" ng-controller="AlbumController" ng-repeat="song in albumPicasso.songs">
+           <td class="song-item-number" data-song-number="' + songNumber + '">{{ $index + 1 }} </td>
+           <td class="song-item-title">{{ song.name }}</td>
+           <td class="song-item-duration">{{ song.length }}</td>
+         </tr>
         </table>
     </main>
 
