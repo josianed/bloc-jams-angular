@@ -6,4 +6,10 @@ bower_components/
 dist
 dist/index.html
 dist/scripts/app.js
+<<<<<<< HEAD
 dist
+=======
+dist/
+dist/
+dist/
+>>>>>>> assignment-4
