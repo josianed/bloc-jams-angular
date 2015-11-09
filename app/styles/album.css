@@ -1,4 +1,4 @@
-body.album {
+.album-view {
     background-image: url(../assets/images/blurred_backgrounds/blur_bg_3.jpg);
     background-repeat: repeat-y;
     background-position: center center;
@@ -98,7 +98,7 @@ body.album {
 }
 
 @media (max-width: 64rem) and (min-width: 20rem) {
-    body.album {
+    .album-view {
         padding-bottom: 200px;
     }
     
