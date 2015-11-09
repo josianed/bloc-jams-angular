@@ -1,15 +1,6 @@
 node_modules/
 bower_components/
+dist/
 .idea/
 .sass-cache/
 .DS_Storedist
-dist
-dist/index.html
-dist/scripts/app.js
-<<<<<<< HEAD
-dist
-=======
-dist/
-dist/
-dist/
->>>>>>> assignment-4
