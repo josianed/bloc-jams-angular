@@ -119,28 +119,7 @@ blocJams.factory('SongPlayer', [function() {
 			setSong(currentSongIndex);
 			currentSoundFile.play();
 			updateSeekBarWhileSongPlays();
-			
-			// currentlyPlayingSongNumber = currentSongIndex + 1;
-			// currentSongFromAlbum = currentAlbum.songs[currentSongIndex];
-			//updatePlayerBarSong() function, but modifying left controls
-			var songName = document.getElementsByClassName('currently-playing song-name');
-			var artistName = document.getElementsByClassName('currently-playing artist-name');
-			var artistSongMobile = document.getElementsByClassName('currently-playing artist-song-mobile');
 
-			songName.text(currentSongFromAlbum.name);
-			artistName.text(currentAlbum.artist);
-			artistSongMobile.text(currentSongFromAlbum.name + " - " + currentAlbum.name);
-
-			document.getElementsByClassName('left-controls play-pause').innerHtml = playerBarPauseButton;
-
-			var lastSongNumber = getLastSongNumber(currentSongIndex);
-			var newCurrentSongNumberCell = document.getElementsByClassName('song-item-number[data-song-number="' + currentlyPlayingSongNumber + '"]');
-			// var $newCurrentSongNumberCell = (getSongNumberCell() + '[data-song-number="' + currentlyPlayingSongNumber + '"]');
-			var previousSongNumberCell = document.getElementsByClassName('song-item-number[data-song-number="' + lastSongNumber + '"]');
-			// var $previousSongNumberCell = (getSongNumberCell + '[data-song-number="' + lastSongNumber + '"]');
-
-			newCurrentSongNumberCell.innerHtml = pauseButtonTemplate;
-			previousSongNumberCell.innerHtml = lastSongNumber;
 		};
 
 
@@ -164,90 +143,54 @@ blocJams.factory('SongPlayer', [function() {
 			setSong(currentSongIndex);
 			currentSoundFile.play();
 			updateSeekBarWhileSongPlays();
-			// currentlyPlayingSongNumber = currentSongIndex + 1;
-			// currentSongFromAlbum = currentAlbum.songs[currentSongIndex];
-			//updatePlayerBarSong() function, but modifying left controls
-			var songName = $('.currently-playing .song-name');
-			var artistName = $('.currently-playing .artist-name');
-			var artistSongMobile = $('.currently-playing .artist-song-mobile');
-
-			songName.text(currentSongFromAlbum.name);
-			artistName.text(currentAlbum.artist);
-			artistSongMobile.text(currentSongFromAlbum.name + " - " + currentAlbum.name);
-
-			$('.left-controls .play-pause').html(playerBarPauseButton);
-
-			var lastSongNumber = getLastSongNumber(currentSongIndex);
-			var newCurrentSongNumberCell = document.getElementsByClassName('song-item-number[data-song-number="' + currentlyPlayingSongNumber + '"]');
-			// var $newCurrentSongNumberCell = (getSongNumberCell() + '[data-song-number="' + currentlyPlayingSongNumber + '"]');
-			var previousSongNumberCell = document.getElementsByClassName('song-item-number[data-song-number="' + lastSongNumber + '"]');
-			// var $previousSongNumberCell = (getSongNumberCell + '[data-song-number="' + lastSongNumber + '"]');
-
-			previousSongNumberCell.innerHtml = lastSongNumber;
-			newCurrentSongNumberCell.innerHtml = pauseButtonTemplate;
 
 		};
 
 
-setSong: function(songNumber) {
+		setSong: function(songNumber) {
 
-	if (currentSoundFile) {
-		currentSoundFile.stop();
+			if (currentSoundFile) {
+				currentSoundFile.stop();
+			}
+
+			currentlyPlayingSongNumber = parseInt(songNumber + 1);
+			currentSongFromAlbum = currentAlbum.songs[songNumber];
+
+			currentSoundFile = new buzz.sound(currentSongFromAlbum.audioUrl, {
+
+				formats: [ 'mp3' ],
+				preload: true
+			});
+
+			setVolume(currentVolume);
+
+		};
+
+
+		seek: function(time) {
+			if (currentSoundFile) {
+				currentSoundFile.setTime(time);
+			}
+		}
+
+
+		setVolume: function(volume) {
+			if (currentSoundFile) {
+				currentSoundFile.setVolume(volume);
+			}
+		};
+
+
+		togglePlayFromPlayerBar: function() {
+
+			if (currentSoundFile.isPaused()) {
+				currentSoundFile.play();
+			} else if (currentSoundFile) {
+				currentSoundFile.pause();
+			}
+
+		};
 	}
-
-	currentlyPlayingSongNumber = parseInt(songNumber + 1);
-	currentSongFromAlbum = currentAlbum.songs[songNumber];
-
-	currentSoundFile = new buzz.sound(currentSongFromAlbum.audioUrl, {
-
-		formats: [ 'mp3' ],
-		preload: true
-	});
-
-	setVolume(currentVolume);
-
-};
-
-
-seek: function(time) {
-	if (currentSoundFile) {
-		currentSoundFile.setTime(time);
-	}
-}
-
-
-setVolume: function(volume) {
-	if (currentSoundFile) {
-		currentSoundFile.setVolume(volume);
-	}
-};
-
-
-getSongNumberCell: function(number) {
-
-	var songNumberCell = document.getElementsByClassName('song-item-number');
-
-	return songNumberCell;
-
-};
-
-
-togglePlayFromPlayerBar: function() {
-
-	var songNumberCell = document.getElementsByClassName('song-item-number');
-
-	if (currentSoundFile.isPaused()) {
-		songNumberCell.html(playerBarPauseButton);
-		playPause.html(playerBarPauseButton);
-		currentSoundFile.play();
-	} else if (currentSoundFile) {
-		songNumberCell.html(playerBarPauseButton);
-		playPause.html(playerBarPauseButton);
-		currentSoundFile.pause();
-	}
-
-};
-}
 
 
 //Album button templates
