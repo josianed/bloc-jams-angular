@@ -65,9 +65,35 @@ blocJams.controller('CollectionController', ['$scope', function($scope) {
 		{ name: 'Pink', length: 153.14, audioUrl: 'assets/music/pink' },
 		{ name: 'Magenta', length: 374.22, audioUrl: 'assets/music/magenta' }
 		]
+	},
+	{
+		name: 'The Colors',
+		artist: 'Pablo Picasso',
+		label: 'Cubism',
+		year: '1881',
+		albumArtUrl: 'assets/images/album_covers/01.png',
+		songs: [
+		{ name: 'Blue', length: 161.71, audioUrl: 'assets/music/blue' },
+		{ name: 'Green', length: 103.96, audioUrl: 'assets/music/green' },
+		{ name: 'Red', length: 268.45, audioUrl: 'assets/music/red' },
+		{ name: 'Pink', length: 153.14, audioUrl: 'assets/music/pink' },
+		{ name: 'Magenta', length: 374.22, audioUrl: 'assets/music/magenta' }
+		]
+	},
+	{
+		name: 'The Colors',
+		artist: 'Pablo Picasso',
+		label: 'Cubism',
+		year: '1881',
+		albumArtUrl: 'assets/images/album_covers/01.png',
+		songs: [
+		{ name: 'Blue', length: 161.71, audioUrl: 'assets/music/blue' },
+		{ name: 'Green', length: 103.96, audioUrl: 'assets/music/green' },
+		{ name: 'Red', length: 268.45, audioUrl: 'assets/music/red' },
+		{ name: 'Pink', length: 153.14, audioUrl: 'assets/music/pink' },
+		{ name: 'Magenta', length: 374.22, audioUrl: 'assets/music/magenta' }
+		]
 	}];
-
-	angular.copy($scope.albumCollection);
 
 }]);
 
@@ -92,12 +118,52 @@ blocJams.controller('AlbumController', ['$scope', 'SongPlayer', function($scope)
 
 blocJams.factory('SongPlayer', [function() {
 
+	//Store the state of playing songs
+	var currentAlbum = null;
+	var currentlyPlayingSongNumber = null;
+	var currentSongFromAlbum = null;
+	var currentSoundFile = null;
+	var currentVolume = 80;
+
+	var trackIndex = function(album, song) {
+			return album.songs.indexOf(song);
+	};
+
+	var setSong = function(songNumber) {
+
+		if (currentSoundFile) {
+			currentSoundFile.stop();
+		}
+
+		currentlyPlayingSongNumber = parseInt(songNumber + 1);
+		currentSongFromAlbum = currentAlbum.songs[songNumber];
+
+		currentSoundFile = new buzz.sound(currentSongFromAlbum.audioUrl, {
+
+			formats: [ 'mp3' ],
+			preload: true
+		});
+
+		setVolume(currentVolume);
+
+	};
+
 
 	return {
-		trackIndex: function(album, song) {
-			return album.songs.indexOf(song);
-		};
 
+		play: function() {
+			if (!this.playing) {
+				setSong(currentlyPlayingSongNumber);
+			} else {
+				this.playing = true;
+			}
+			currentSoundFile.play();
+		},
+
+		pause: function() {
+			this.playing = false;
+			currentSoundFile.pause();
+		},
 
 		nextSong: function() {
 
@@ -118,9 +184,8 @@ blocJams.factory('SongPlayer', [function() {
 
 			setSong(currentSongIndex);
 			currentSoundFile.play();
-			updateSeekBarWhileSongPlays();
 
-		};
+		},
 
 
 		previousSong: function() {
@@ -142,73 +207,34 @@ blocJams.factory('SongPlayer', [function() {
 
 			setSong(currentSongIndex);
 			currentSoundFile.play();
-			updateSeekBarWhileSongPlays();
 
-		};
-
-
-		setSong: function(songNumber) {
-
-			if (currentSoundFile) {
-				currentSoundFile.stop();
-			}
-
-			currentlyPlayingSongNumber = parseInt(songNumber + 1);
-			currentSongFromAlbum = currentAlbum.songs[songNumber];
-
-			currentSoundFile = new buzz.sound(currentSongFromAlbum.audioUrl, {
-
-				formats: [ 'mp3' ],
-				preload: true
-			});
-
-			setVolume(currentVolume);
-
-		};
+		},
 
 
 		seek: function(time) {
 			if (currentSoundFile) {
 				currentSoundFile.setTime(time);
 			}
-		}
+		},
 
 
 		setVolume: function(volume) {
 			if (currentSoundFile) {
 				currentSoundFile.setVolume(volume);
 			}
-		};
+		},
 
 
-		togglePlayFromPlayerBar: function() {
+		// togglePlayFromPlayerBar: function() {
 
-			if (currentSoundFile.isPaused()) {
-				currentSoundFile.play();
-			} else if (currentSoundFile) {
-				currentSoundFile.pause();
-			}
+		// 	if (currentSoundFile.isPaused()) {
+		// 		currentSoundFile.play();
+		// 	} else if (currentSoundFile) {
+		// 		currentSoundFile.pause();
+		// 	}
 
-		};
+		// }
 	}
 
-
-//Album button templates
-var playButtonTemplate = '<a class="album-song-button"><span class="ion-play"></span></a>';
-var pauseButtonTemplate = '<a class="album-song-button"><span class="ion-pause"></span></a>';
-var playerBarPlayButton = '<span class="ion-play"></span>';
-var playerBarPauseButton = '<span class="ion-pause"></span>';
-
-//Store the state of playing songs
-var currentAlbum = null;
-var currentlyPlayingSongNumber = null;
-var currentSongFromAlbum = null;
-var currentSoundFile = null;
-var currentVolume = 80;
-
-//next and previous buttons
-var previousButton = document.getElementsByClassName('main-controls previous');
-var nextButton = document.getElementsByClassName('main-controls next');
-var playPause = document.getElementsByClassName('main-controls play-pause');
 
 }]);
