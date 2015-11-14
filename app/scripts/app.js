@@ -98,7 +98,7 @@ blocJams.controller('CollectionController', ['$scope', function($scope) {
 }]);
 
 
-blocJams.controller('AlbumController', ['$scope', 'SongPlayer', function($scope) {
+blocJams.controller('AlbumController', ['$scope', function($scope, SongPlayer) {
 	$scope.album = {
 		name: 'The Colors',
 		artist: 'Pablo Picasso',
@@ -113,13 +113,33 @@ blocJams.controller('AlbumController', ['$scope', 'SongPlayer', function($scope)
 			{ name: 'Magenta', length: 374.22, audioUrl: 'assets/music/magenta' }
 		]
 	};
+
+	$scope.playSong = function(song) {
+		SongPlayer.play();
+	};
+
+	$scope.pauseSong = function(song) {
+		SongPlayer.pause();
+	};
+
+	$scope.nextSong = function(song) {
+		SongPlayer.nextSong();
+	};
+
+	$scope.previousSong = function(song) {
+		SongPlayer.previousSong();
+	};
+
+	$scope.seek = function() {
+		SongPlayer.seek();
+	};
 }]);
 
 
 blocJams.factory('SongPlayer', [function() {
 
 	//Store the state of playing songs
-	var currentAlbum = null;
+	var currentAlbum = album;
 	var currentlyPlayingSongNumber = null;
 	var currentSongFromAlbum = null;
 	var currentSoundFile = null;
@@ -153,7 +173,8 @@ blocJams.factory('SongPlayer', [function() {
 
 		play: function() {
 			if (!this.playing) {
-				setSong(currentlyPlayingSongNumber);
+				setSong(currentSongFromAlbum);
+				this.playing = true;
 			} else {
 				this.playing = true;
 			}
@@ -222,19 +243,8 @@ blocJams.factory('SongPlayer', [function() {
 			if (currentSoundFile) {
 				currentSoundFile.setVolume(volume);
 			}
-		},
+		}
 
-
-		// togglePlayFromPlayerBar: function() {
-
-		// 	if (currentSoundFile.isPaused()) {
-		// 		currentSoundFile.play();
-		// 	} else if (currentSoundFile) {
-		// 		currentSoundFile.pause();
-		// 	}
-
-		// }
 	}
-
 
 }]);
