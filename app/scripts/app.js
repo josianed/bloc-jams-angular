@@ -1,6 +1,52 @@
 var blocJams = angular.module('blocJams', ['ui.router']);
 
-blocJams.config(function($stateProvider, $locationProvider) {
+blocJams.constant("CONFIG", {
+	ALBUMS: [{
+			name: 'The Colors 1',
+			artist: 'Pablo Picasso',
+			label: 'Cubism',
+			year: '1881',
+			albumArtUrl: 'assets/images/album_covers/01.png',
+			songs: [
+			{ name: 'Blue', length: 161.71, audioUrl: 'assets/music/blue' },
+			{ name: 'Green', length: 103.96, audioUrl: 'assets/music/green' },
+			{ name: 'Red', length: 268.45, audioUrl: 'assets/music/red' },
+			{ name: 'Pink', length: 153.14, audioUrl: 'assets/music/pink' },
+			{ name: 'Magenta', length: 374.22, audioUrl: 'assets/music/magenta' }
+			]
+		},
+		{
+			name: 'The Colors 2',
+			artist: 'Pablo Picasso',
+			label: 'Cubism',
+			year: '1881',
+			albumArtUrl: 'assets/images/album_covers/01.png',
+			songs: [
+			{ name: 'Blue', length: 161.71, audioUrl: 'assets/music/blue' },
+			{ name: 'Green', length: 103.96, audioUrl: 'assets/music/green' },
+			{ name: 'Red', length: 268.45, audioUrl: 'assets/music/red' },
+			{ name: 'Pink', length: 153.14, audioUrl: 'assets/music/pink' },
+			{ name: 'Magenta', length: 374.22, audioUrl: 'assets/music/magenta' }
+			]
+		},
+		{
+			name: 'The Colors 3',
+			artist: 'Pablo Picasso',
+			label: 'Cubism',
+			year: '1881',
+			albumArtUrl: 'assets/images/album_covers/01.png',
+			songs: [
+			{ name: 'Blue', length: 161.71, audioUrl: 'assets/music/blue' },
+			{ name: 'Green', length: 103.96, audioUrl: 'assets/music/green' },
+			{ name: 'Red', length: 268.45, audioUrl: 'assets/music/red' },
+			{ name: 'Pink', length: 153.14, audioUrl: 'assets/music/pink' },
+			{ name: 'Magenta', length: 374.22, audioUrl: 'assets/music/magenta' }
+			]
+		}
+	]
+});
+
+blocJams.config(function($stateProvider, $locationProvider, CONFIG) {
 
 	$locationProvider.html5Mode({
 		enabled: true,
@@ -9,9 +55,16 @@ blocJams.config(function($stateProvider, $locationProvider) {
 
 	$stateProvider
 	.state('album', {
-		url: '/album',
-		controller: 'AlbumController',
-		templateUrl: '/templates/album.html'
+		url: '/album/{index}',
+		params: {
+			index: { value: '0' }
+		},
+		templateUrl: '/templates/album.html',
+		controller: function($scope, $stateParams) {
+			//get the default index
+			index: '0'
+		}
+
 	})
 
 	.state('collection', {
@@ -50,69 +103,15 @@ blocJams.controller('LandingController', [
 ]);
 
 
-blocJams.controller('CollectionController', ['$scope', function($scope) {
+blocJams.controller('CollectionController', ['$scope', 'CONFIG', function($scope, CONFIG) {
 
-	$scope.albumCollection = [{
-		name: 'The Colors',
-		artist: 'Pablo Picasso',
-		label: 'Cubism',
-		year: '1881',
-		albumArtUrl: 'assets/images/album_covers/01.png',
-		songs: [
-		{ name: 'Blue', length: 161.71, audioUrl: 'assets/music/blue' },
-		{ name: 'Green', length: 103.96, audioUrl: 'assets/music/green' },
-		{ name: 'Red', length: 268.45, audioUrl: 'assets/music/red' },
-		{ name: 'Pink', length: 153.14, audioUrl: 'assets/music/pink' },
-		{ name: 'Magenta', length: 374.22, audioUrl: 'assets/music/magenta' }
-		]
-	},
-	{
-		name: 'The Colors',
-		artist: 'Pablo Picasso',
-		label: 'Cubism',
-		year: '1881',
-		albumArtUrl: 'assets/images/album_covers/01.png',
-		songs: [
-		{ name: 'Blue', length: 161.71, audioUrl: 'assets/music/blue' },
-		{ name: 'Green', length: 103.96, audioUrl: 'assets/music/green' },
-		{ name: 'Red', length: 268.45, audioUrl: 'assets/music/red' },
-		{ name: 'Pink', length: 153.14, audioUrl: 'assets/music/pink' },
-		{ name: 'Magenta', length: 374.22, audioUrl: 'assets/music/magenta' }
-		]
-	},
-	{
-		name: 'The Colors',
-		artist: 'Pablo Picasso',
-		label: 'Cubism',
-		year: '1881',
-		albumArtUrl: 'assets/images/album_covers/01.png',
-		songs: [
-		{ name: 'Blue', length: 161.71, audioUrl: 'assets/music/blue' },
-		{ name: 'Green', length: 103.96, audioUrl: 'assets/music/green' },
-		{ name: 'Red', length: 268.45, audioUrl: 'assets/music/red' },
-		{ name: 'Pink', length: 153.14, audioUrl: 'assets/music/pink' },
-		{ name: 'Magenta', length: 374.22, audioUrl: 'assets/music/magenta' }
-		]
-	}];
+	$scope.albumCollection = CONFIG.ALBUMS;
 
 }]);
 
 
-blocJams.controller('AlbumController', ['$scope', function($scope, SongPlayer) {
-	$scope.album = {
-		name: 'The Colors',
-		artist: 'Pablo Picasso',
-		label: 'Cubism',
-		year: '1881',
-		albumArtUrl: 'assets/images/album_covers/01.png',
-		songs: [
-			{ name: 'Blue', length: 161.71, audioUrl: 'assets/music/blue' },
-			{ name: 'Green', length: 103.96, audioUrl: 'assets/music/green' },
-			{ name: 'Red', length: 268.45, audioUrl: 'assets/music/red' },
-			{ name: 'Pink', length: 153.14, audioUrl: 'assets/music/pink' },
-			{ name: 'Magenta', length: 374.22, audioUrl: 'assets/music/magenta' }
-		]
-	};
+blocJams.controller('AlbumController', ['$scope', 'SongPlayer', 'CONFIG', function($scope, SongPlayer, CONFIG) {
+	$scope.album = CONFIG.ALBUMS[0];
 
 	$scope.playSong = function(song) {
 		SongPlayer.play();
@@ -136,10 +135,10 @@ blocJams.controller('AlbumController', ['$scope', function($scope, SongPlayer) {
 }]);
 
 
-blocJams.factory('SongPlayer', [function() {
+blocJams.factory('SongPlayer', ["CONFIG", function(CONFIG) {
 
 	//Store the state of playing songs
-	var currentAlbum = album;
+	var currentAlbum = CONFIG.ALBUMS[0];
 	var currentlyPlayingSongNumber = null;
 	var currentSongFromAlbum = null;
 	var currentSoundFile = null;
