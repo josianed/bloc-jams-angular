@@ -56,15 +56,12 @@ blocJams.config(function($stateProvider, $locationProvider) {
 	$stateProvider
 	.state('album', {
 		url: '/album/:id',
-		params: {
-			id: { value: '0' }
-		},
+		// params: {
+		// 	id: { value: '0' }
+		// },
 		templateUrl: '/templates/album.html',
 		controller: "AlbumController",
-		// controller: function($scope, $stateParams) {
-			
-		// 	$scope.index = $stateParams.index;
-		// }
+	
 	})
 
 	.state('collection', {
@@ -117,41 +114,38 @@ blocJams.controller('AlbumController', [
 	'SongPlayer',
 	'CONFIG',
 	function($scope, $log, $stateParams, SongPlayer, CONFIG) {
-		// alert("asdfadf");
+		//alert("asdfadf");
 		$log.debug("AlbumController");
 		$log.debug($stateParams);
 
 		$scope.album = CONFIG.ALBUMS[$stateParams.id];
 
-		$scope.playSong = function(songNumber) {
-			// $log.debug(songNumber);
-			SongPlayer.play(songNumber);
+		$scope.playSong = function(song) {
+			$log.debug(song);
+			SongPlayer.play();
 		};
-		$scope.playSong($scope.album.songs[0]);
+		//$scope.playSong($scope.album.songs[0]);
 
-		$scope.pauseSong = function() {
+		$scope.pauseSong = function(song) {
 			SongPlayer.pause();
 		};
 
-		$scope.nextSong = function() {
+		$scope.nextSong = function(song) {
 			SongPlayer.nextSong();
 		};
 
-		$scope.previousSong = function() {
+		$scope.previousSong = function(song) {
 			SongPlayer.previousSong();
 		};
 
-		$scope.seek = function(time) {
-			SongPlayer.seek(time);
+		$scope.seek = function() {
+			SongPlayer.seek();
 		};
 	}
 ]);
 
 
-blocJams.factory('SongPlayer', [
-	'$stateParams', 
-	'CONFIG', 
-	function($stateParams, CONFIG) {
+blocJams.factory('SongPlayer', ['$stateParams', 'CONFIG', function($stateParams, CONFIG) {
 
 	//Store the state of playing songs
 	var currentAlbum = CONFIG.ALBUMS[$stateParams.id];
@@ -179,12 +173,6 @@ blocJams.factory('SongPlayer', [
 
 	};
 
-	var setVolume = function(volume) {
-			if (currentSoundFile) {
-				currentSoundFile.setVolume(volume);
-			}
-	};
-
 
 	return {
 
@@ -195,7 +183,7 @@ blocJams.factory('SongPlayer', [
 		},
 
 		pause: function() {
-
+			this.playing = false;
 			currentSoundFile.pause();
 		},
 
@@ -249,7 +237,15 @@ blocJams.factory('SongPlayer', [
 			if (currentSoundFile) {
 				currentSoundFile.setTime(time);
 			}
+		},
+
+
+		setVolume: function(volume) {
+			if (currentSoundFile) {
+				currentSoundFile.setVolume(volume);
+			}
 		}
+
 	}
 
 }]);
