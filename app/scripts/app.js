@@ -46,7 +46,7 @@ blocJams.constant("CONFIG", {
 	]
 });
 
-blocJams.config(function($stateProvider, $locationProvider, CONFIG) {
+blocJams.config(function($stateProvider, $locationProvider) {
 
 	$locationProvider.html5Mode({
 		enabled: true,
@@ -55,16 +55,16 @@ blocJams.config(function($stateProvider, $locationProvider, CONFIG) {
 
 	$stateProvider
 	.state('album', {
-		url: '/album/{index}',
+		url: '/album/:id',
 		params: {
-			index: { value: '0' }
+			id: { value: '0' }
 		},
 		templateUrl: '/templates/album.html',
-		controller: function($scope, $stateParams) {
-			//get the default index
-			index: '0'
-		}
-
+		controller: "AlbumController",
+		// controller: function($scope, $stateParams) {
+			
+		// 	$scope.index = $stateParams.index;
+		// }
 	})
 
 	.state('collection', {
@@ -103,42 +103,58 @@ blocJams.controller('LandingController', [
 ]);
 
 
-blocJams.controller('CollectionController', ['$scope', 'CONFIG', function($scope, CONFIG) {
-
+blocJams.controller('CollectionController', ['$log', '$scope', 'CONFIG', function($log, $scope, CONFIG) {
+	$log.debug("CollectionController");
 	$scope.albumCollection = CONFIG.ALBUMS;
 
 }]);
 
 
-blocJams.controller('AlbumController', ['$scope', 'SongPlayer', 'CONFIG', function($scope, SongPlayer, CONFIG) {
-	$scope.album = CONFIG.ALBUMS[0];
+blocJams.controller('AlbumController', [
+	'$scope',
+	'$log',
+	'$stateParams',
+	'SongPlayer',
+	'CONFIG',
+	function($scope, $log, $stateParams, SongPlayer, CONFIG) {
+		// alert("asdfadf");
+		$log.debug("AlbumController");
+		$log.debug($stateParams);
 
-	$scope.playSong = function(song) {
-		SongPlayer.play();
-	};
+		$scope.album = CONFIG.ALBUMS[$stateParams.id];
 
-	$scope.pauseSong = function(song) {
-		SongPlayer.pause();
-	};
+		$scope.playSong = function(songNumber) {
+			// $log.debug(songNumber);
+			SongPlayer.play(songNumber);
+		};
+		$scope.playSong($scope.album.songs[0]);
 
-	$scope.nextSong = function(song) {
-		SongPlayer.nextSong();
-	};
+		$scope.pauseSong = function() {
+			SongPlayer.pause();
+		};
 
-	$scope.previousSong = function(song) {
-		SongPlayer.previousSong();
-	};
+		$scope.nextSong = function() {
+			SongPlayer.nextSong();
+		};
 
-	$scope.seek = function() {
-		SongPlayer.seek();
-	};
-}]);
+		$scope.previousSong = function() {
+			SongPlayer.previousSong();
+		};
+
+		$scope.seek = function(time) {
+			SongPlayer.seek(time);
+		};
+	}
+]);
 
 
-blocJams.factory('SongPlayer', ["CONFIG", function(CONFIG) {
+blocJams.factory('SongPlayer', [
+	'$stateParams', 
+	'CONFIG', 
+	function($stateParams, CONFIG) {
 
 	//Store the state of playing songs
-	var currentAlbum = CONFIG.ALBUMS[0];
+	var currentAlbum = CONFIG.ALBUMS[$stateParams.id];
 	var currentlyPlayingSongNumber = null;
 	var currentSongFromAlbum = null;
 	var currentSoundFile = null;
@@ -149,10 +165,6 @@ blocJams.factory('SongPlayer', ["CONFIG", function(CONFIG) {
 	};
 
 	var setSong = function(songNumber) {
-
-		if (currentSoundFile) {
-			currentSoundFile.stop();
-		}
 
 		currentlyPlayingSongNumber = parseInt(songNumber + 1);
 		currentSongFromAlbum = currentAlbum.songs[songNumber];
@@ -167,21 +179,23 @@ blocJams.factory('SongPlayer', ["CONFIG", function(CONFIG) {
 
 	};
 
+	var setVolume = function(volume) {
+			if (currentSoundFile) {
+				currentSoundFile.setVolume(volume);
+			}
+	};
+
 
 	return {
 
-		play: function() {
-			if (!this.playing) {
-				setSong(currentSongFromAlbum);
-				this.playing = true;
-			} else {
-				this.playing = true;
-			}
+		play: function(songNumber) {
+
+			setSong(songNumber);
 			currentSoundFile.play();
 		},
 
 		pause: function() {
-			this.playing = false;
+
 			currentSoundFile.pause();
 		},
 
@@ -235,15 +249,7 @@ blocJams.factory('SongPlayer', ["CONFIG", function(CONFIG) {
 			if (currentSoundFile) {
 				currentSoundFile.setTime(time);
 			}
-		},
-
-
-		setVolume: function(volume) {
-			if (currentSoundFile) {
-				currentSoundFile.setVolume(volume);
-			}
 		}
-
 	}
 
 }]);
