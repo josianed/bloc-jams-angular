@@ -120,21 +120,21 @@ blocJams.controller('AlbumController', [
 
 		$scope.album = CONFIG.ALBUMS[$stateParams.id];
 
-		$scope.playSong = function(song) {
-			$log.debug(song);
-			SongPlayer.play();
+		$scope.playSong = function(songIndex) {
+			$log.debug(songIndex);
+			SongPlayer.play(songIndex);
 		};
 		//$scope.playSong($scope.album.songs[0]);
 
-		$scope.pauseSong = function(song) {
+		$scope.pauseSong = function() {
 			SongPlayer.pause();
 		};
 
-		$scope.nextSong = function(song) {
+		$scope.nextSong = function() {
 			SongPlayer.nextSong();
 		};
 
-		$scope.previousSong = function(song) {
+		$scope.previousSong = function() {
 			SongPlayer.previousSong();
 		};
 
@@ -149,8 +149,7 @@ blocJams.factory('SongPlayer', ['$stateParams', 'CONFIG', function($stateParams,
 
 	//Store the state of playing songs
 	var currentAlbum = CONFIG.ALBUMS[$stateParams.id];
-	var currentlyPlayingSongNumber = null;
-	var currentSongFromAlbum = null;
+	var currentSongFromAlbum = 0;
 	var currentSoundFile = null;
 	var currentVolume = 80;
 
@@ -158,32 +157,30 @@ blocJams.factory('SongPlayer', ['$stateParams', 'CONFIG', function($stateParams,
 			return album.songs.indexOf(song);
 	};
 
-	var setSong = function(songNumber) {
-
-		currentlyPlayingSongNumber = parseInt(songNumber + 1);
-		currentSongFromAlbum = currentAlbum.songs[songNumber];
-
-		currentSoundFile = new buzz.sound(currentSongFromAlbum.audioUrl, {
-
-			formats: [ 'mp3' ],
-			preload: true
-		});
-
-		setVolume(currentVolume);
-
-	};
 
 
 	return {
 
-		play: function(songNumber) {
+		setSong: function(songIndex) {
 
-			setSong(songNumber);
+			currentSongFromAlbum = currentAlbum.songs[songIndex];
+
+			currentSoundFile = new buzz.sound(currentSongFromAlbum.audioUrl, {
+
+				formats: [ 'mp3' ],
+				preload: true
+			});
+
+			setVolume(currentVolume);
+
+		},
+
+		play: function(songIndex) {
+			setSong(songIndex);
 			currentSoundFile.play();
 		},
 
 		pause: function() {
-			this.playing = false;
 			currentSoundFile.pause();
 		},
 
