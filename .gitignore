@@ -3,6 +3,4 @@ bower_components/
 .idea/
 .sass-cache/
 .DS_Storedist
-/dist
-dist/index.html
-dist/scripts/app.js
+dist/
