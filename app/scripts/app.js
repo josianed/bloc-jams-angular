@@ -116,15 +116,16 @@ blocJams.controller('AlbumController', [
 	function($scope, $log, $stateParams, SongPlayer, CONFIG) {
 		//alert("asdfadf");
 		$log.debug("AlbumController");
-		$log.debug($stateParams);
+		$log.debug("state params" + $stateParams);
 
 		$scope.album = CONFIG.ALBUMS[$stateParams.id];
 
 		$scope.playSong = function(songIndex) {
-			$log.debug(songIndex);
+			$log.debug("Song index: ", songIndex);
 			SongPlayer.play(songIndex);
 		};
-		//$scope.playSong($scope.album.songs[0]);
+
+		// $scope.SongPlayer.play($scope.album.songs[0]);
 
 		$scope.pauseSong = function() {
 			SongPlayer.pause();
@@ -145,11 +146,11 @@ blocJams.controller('AlbumController', [
 ]);
 
 
-blocJams.factory('SongPlayer', ['$stateParams', 'CONFIG', function($stateParams, CONFIG) {
+blocJams.factory('SongPlayer', ['$stateParams', '$log', 'CONFIG', function($stateParams, $log, CONFIG) {
 
 	//Store the state of playing songs
 	var currentAlbum = CONFIG.ALBUMS[$stateParams.id];
-	var currentSongFromAlbum = 0;
+	var currentSongFromAlbum = {};
 	var currentSoundFile = null;
 	var currentVolume = 80;
 
@@ -157,26 +158,51 @@ blocJams.factory('SongPlayer', ['$stateParams', 'CONFIG', function($stateParams,
 			return album.songs.indexOf(song);
 	};
 
+	function setVolume(volume) {
+		if (currentSoundFile) {
+			currentSoundFile.setVolume(volume);
+		}
+	}
+
+	function setSong(songIndex) {
+
+		currentSongFromAlbum = currentAlbum.songs[songIndex];
+
+		currentSoundFile = new buzz.sound(currentSongFromAlbum.audioUrl, {
+
+			formats: [ 'mp3' ],
+			preload: true
+		});
+
+		setVolume(currentVolume);
+
+	}
+
 
 
 	return {
 
-		setSong: function(songIndex) {
+		// setSong: function(songIndex) {
 
-			currentSongFromAlbum = currentAlbum.songs[songIndex];
+		// 	if (currentSongFromAlbum === null) {
+		// 		songIndex = 0;
+		// 	} 
 
-			currentSoundFile = new buzz.sound(currentSongFromAlbum.audioUrl, {
+		// 	currentSongFromAlbum = currentAlbum.songs[songIndex];
 
-				formats: [ 'mp3' ],
-				preload: true
-			});
+		// 	currentSoundFile = new buzz.sound(currentSongFromAlbum.audioUrl, {
 
-			setVolume(currentVolume);
+		// 		formats: [ 'mp3' ],
+		// 		preload: true
+		// 	});
 
-		},
+		// 	setVolume(currentVolume);
+
+		// },
 
 		play: function(songIndex) {
 			setSong(songIndex);
+			$log.debug(currentSoundFile);
 			currentSoundFile.play();
 		},
 
@@ -233,13 +259,6 @@ blocJams.factory('SongPlayer', ['$stateParams', 'CONFIG', function($stateParams,
 		seek: function(time) {
 			if (currentSoundFile) {
 				currentSoundFile.setTime(time);
-			}
-		},
-
-
-		setVolume: function(volume) {
-			if (currentSoundFile) {
-				currentSoundFile.setVolume(volume);
 			}
 		}
 
