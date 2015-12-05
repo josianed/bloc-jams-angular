@@ -1,11 +1,15 @@
-<ul class="album-list">
-    <li class="album-list-item" ng-repeat="album in albumCollection">
-        <img ng-src="{{ album.albumArtUrl }}"></img>
-        <a ui-sref="album({ index: $index })">{{ album.name }}</a>
-        <a ui-sref="album({ index: $index })">{{ album.artist }}</a>
-        <h3>X Songs</h3>
-       <!--  <ol>
-            <li ng-repeat="song in album.songs">{{ song.name }}</li>
-        </ol> -->
-    </li>
-</ul>
+<section class="album-covers container clearfix">
+     <div class="collection-album-container column fourth" ng-repeat="album in albumCollection">
+         <img ng-src="{{ album.albumArtUrl }}"/>
+         <div class="collection-album-info caption">
+             <p>
+                 <a ui-sref="album({ index: $index })">{{ album.name }}</a>
+                 <br/>
+                 <a ui-sref="album({ index: $index })">{{ album.artist }}</a>
+                 <br/>
+                 X songs
+                 <br/>
+             </p>
+         </div>
+     </div>
+ </section>
