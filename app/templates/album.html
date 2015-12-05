@@ -10,24 +10,24 @@
         </div>
     </section>
     <table class="album-view-song-list">
-       <tr class="album-view-song-item" ng-repeat="song in album.songs">
-       <td class="song-item-number" data-song-number="' + songNumber + '">{{ $index + 1 }} </td>
-       <td class="song-item-title">{{ song.name }}</td>
-       <td class="song-item-duration">{{ song.length }}</td>
-     </tr>
+        <tr class="album-view-song-item" ng-repeat="song in album.songs">
+            <td class="song-item-number" data-song-number="' + songNumber + '" ng-click="playSong($index)">{{ $index + 1 }} </td>
+            <td class="song-item-title">{{ song.name }}</td>
+            <td class="song-item-duration">{{ song.length }}</td>
+        </tr>
     </table>
 </main>
 
 <section class="player-bar">
  <div class="container">
      <div class="control-group main-controls">
-        <a class="previous">
+        <a class="previous" ng-click"previousSong()">
              <span class="ion-skip-backward"></span>
          </a>
-         <a class="play-pause">
+         <a class="play-pause" ng-click="playSong(songIndex)">
              <span class="ion-play"></span>
          </a>
-         <a class="next">
+         <a class="next" ng-click="nextSong()">
              <span class="ion-skip-forward"></span>
          </a>
      </div>
@@ -35,7 +35,7 @@
         <h2 class="song-name"></h2>
         <h2 class="artist-song-mobile"></h2>
         <h3 class="artist-name"></h3>
-        <div class="seek-control">
+        <div class="seek-control" ng-click="seek()">
              <div class="seek-bar">
                  <div class="fill"></div>
                  <div class="thumb"></div>

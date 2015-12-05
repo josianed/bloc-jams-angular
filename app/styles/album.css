@@ -48,6 +48,7 @@
 
 .song-item-number {
     width: 5%;
+    cursor: pointer;
 }
 
 .song-item-title {
