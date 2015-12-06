@@ -9,9 +9,9 @@
 		$stateProvider
 			.state('album', {
 				url: '/album/:id',
-				// params: {
-				// 	id: { value: '0' }
-				// },
+				params: {
+					id: { value: '0' }
+				},
 				templateUrl: '/templates/album.html',
 				controller: "AlbumController"
 			})
