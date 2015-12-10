@@ -8,9 +8,9 @@
 
 		$stateProvider
 			.state('album', {
-				url: '/album/:id',
-				templateUrl: '/templates/album.html',
-				controller: 'AlbumController'
+				url: '/album',
+				controller: 'AlbumCtrl as album',
+				templateUrl: '/templates/album.html'
 			})
 
 			.state('collection', {
