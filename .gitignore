@@ -5,3 +5,4 @@ dist/
 .sass-cache/
 .DS_Storedist
 
+node_modules.backup/

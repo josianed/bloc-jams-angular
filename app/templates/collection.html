@@ -1,13 +1,13 @@
 <section class="album-covers container clearfix">
-     <div class="collection-album-container column fourth" ng-repeat="album in albumCollection">
+     <div class="collection-album-container column fourth" ng-repeat="album in collection.albums">
          <img ng-src="{{ album.albumArtUrl }}"/>
          <div class="collection-album-info caption">
              <p>
-                 <a ui-sref="album({ index: $index })">{{ album.name }}</a>
+                 <a class="album-name" ui-sref="album">{{ album.name }}</a>
                  <br/>
-                 <a ui-sref="album({ index: $index })">{{ album.artist }}</a>
+                 <a ui-sref="album">{{ album.artist }}</a>
                  <br/>
-                 X songs
+                 {{ album.songs.length }} songs
                  <br/>
              </p>
          </div>
