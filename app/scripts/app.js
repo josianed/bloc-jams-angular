@@ -13,18 +13,18 @@
 					id: { value: '0' }
 				},
 				templateUrl: '/templates/album.html',
-				controller: "AlbumController"
+				// controller: "AlbumController"
 			})
 
 			.state('collection', {
 				url: '/collection',
-				controller: 'CollectionController',
+				// controller: 'CollectionController',
 				templateUrl: '/templates/collection.html'
 			})
 
 			.state('landing', {
 				url: '/landing',
-				controller: 'LandingController',
+				// controller: 'LandingController',
 				templateUrl: '/templates/landing.html'
 			});
 		}
@@ -92,7 +92,7 @@
 // ]);
 
 
-//create controllers for landing, collection, and album
+// create controllers for landing, collection, and album
 // blocJams.controller('LandingController', [
 // 	'$scope',
 // 	'$log',
