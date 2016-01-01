@@ -25,6 +25,15 @@
 		}
 
 		/**
+		* @function stopSong
+		* @desc stops the current Buzz object and sets the song object to false
+		*/
+		var stopSong = function() {
+			currentBuzzObject.stop();
+			SongPlayer.currentSong.playing = null;
+		}
+
+		/**
 		* @function setSong
 		* @desc Stops currently playing song and loads new audio file as currentBuzzObject
 		* @param {Object} song
@@ -97,14 +106,28 @@
 		SongPlayer.previous = function() {
 			var currentSongIndex = getSongIndex(SongPlayer.currentSong);
      		currentSongIndex--;
-     		console.log("current song index is" + currentSongIndex);
 
 			if (currentSongIndex < 0) {
-				currentBuzzObject.stop();
-				SongPlayer.currentSong.playing = null;
+				stopSong(song);
 			} else {
 				var song = currentAlbum.songs[currentSongIndex];
-				console.log("previous song is " + song);
+				setSong(song);
+				playSong(song);
+			}
+		};
+
+		/**
+		* @function next
+		* @desc Gets the index of the current song and increases it by one, and plays the next song
+		*/
+		SongPlayer.next = function() {
+			var currentSongIndex = getSongIndex(SongPlayer.currentSong);
+			currentSongIndex++;
+
+			if (currentSongIndex > currentAlbum.songs.length - 1) {
+				stopSong(song);
+			} else {
+				var song = currentAlbum.songs[currentSongIndex];
 				setSong(song);
 				playSong(song);
 			}
